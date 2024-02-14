@@ -1,0 +1,31 @@
+server:
+  port: 8386
+
+# Oracle connect
+spring:
+  # File Size
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521/xe
+    username: scottjpa
+    password: tiger
+
+  # JPA Setting
+  jpa:
+    hibernate:
+      ddl-auto: update # none 또는 create
+    properties:
+      hibernate:
+        show_sql: true  # system.out에 하이버네이트 실행 SQL
+        format_sql: true
+        
+  #view Resolver
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
