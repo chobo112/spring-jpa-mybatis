@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<!-- JSTL처럼 밑에거를 적어주면 thymeLeaf를 사용할 수 있음 -->
+<html xml:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>hello.html</h1>
+	<!-- 파라미터는 핼로우 컨트롤러에서 받아온거임 -->
+	<p th:text="안녕+${parameter} "><p>
+</body>
+</html>
