@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.oracle.oBootMybatis01.model.Dept;
 import com.oracle.oBootMybatis01.model.DeptVo;
 import com.oracle.oBootMybatis01.model.Emp;
 import com.oracle.oBootMybatis01.model.EmpDept;
+import com.oracle.oBootMybatis01.model.Member1;
 import com.oracle.oBootMybatis01.service.EmpService;
 import com.oracle.oBootMybatis01.service.Paging;
 
@@ -62,6 +64,7 @@ public class EmpController {
 		//Emp => DTO Emp.java를 list로 담아서 모델로 넘겨줌.. 스프링은 model을 사용함
 		//Dao도 만드는데 ..?
 		//private final EmpService es; es가 EmpService로 보내고(interface -> 구현은 EmpServiceImpl에서 함)
+		
 		List<Emp> listEmp = es.listEmp(emp);
 		System.out.println("EmpController list listEmp.size()=>"+listEmp.size());
 		
@@ -381,7 +384,7 @@ public class EmpController {
 		   		//	
 		   		//	
 		   		
-		   	es.selListDept(map);
+		   	es.selListDept(map); //map이 in도 되고 out도 된다..?
 		   	List<Dept> deptLists = (List<Dept>) map.get("dept");
 		   	//map.get("dept"); -> 을 하면 dept에 해당하는 값들이 여러개 나옴 => 리스트타입처럼
 		   	//=> 그래서 List로 형변환을 해준거임
@@ -395,5 +398,56 @@ public class EmpController {
 		   		
 		   		return "writeDeptCursor";
 	   }
+	   
+	   //interCeptor 시작화면
+	   @RequestMapping(value="interCeptorForm")
+	   public String interCeptorForm(Model model) {
+		   System.out.println("interCeptorForm Start");
+		   return "interCeptorForm";
+	   }
+	   
+	   //interCeptor의 Number2임
+	   @RequestMapping(value="interCeptor")
+	   public String interCeptor(Member1 member1, Model model) {
+		   System.out.println("EmpController interCeptor Test start");
+		   System.out.println("EmpController interCeptor id->"+member1.getId());
+		   
+		   //존재 : 1, 비존재 : 0
+		   int memCnt = es.memCount(member1.getId());
+		   
+		   System.out.println("EmpController interCeptor memCnt->"+memCnt);
+		   
+		   model.addAttribute("id", member1.getId());
+		   model.addAttribute("memCnt", memCnt);
+		   System.out.println("interCeptor Test End");
+		   
+		   return "interCeptor"; //user가 존재하면 User 이용 조회 Page
+	   }
+	   
+	   //SampleInterceptor 내용을 받아 쳐라		get은 메서드 안 적어줘도 됨
+	   @RequestMapping(value="doMemberWrite", method= RequestMethod.GET)
+	   public String doMemberWrite(Model model, HttpServletRequest request) {
+		   String ID = (String) request.getSession().getAttribute("ID");
+		   System.out.println("doMemberWrite 부터 하세요");
+		   model.addAttribute("id",ID);
+		   return "doMemberWrite";
+	   }
+	   
+	   //interCeptor 진행 Test
+	   @RequestMapping(value="doMemberList")
+	   public String doMemberList(Model model, HttpServletRequest request) {
+		   String ID = (String) request.getSession().getAttribute("ID");
+		   System.out.println("doMemberList Test Start Id->"+ID);
+		   Member1 member1 = null;
+		   
+		   //Mmeber1 List Get Service
+		   List<Member1> listMem = es.listMem(member1);
+		   model.addAttribute("ID", ID);
+		   model.addAttribute("listMem", listMem);
+		   return "doMemberList"; 	//user존재하면 user 이용조회 page
+		   
+	   }
+	   
+	   
 	   
 }
