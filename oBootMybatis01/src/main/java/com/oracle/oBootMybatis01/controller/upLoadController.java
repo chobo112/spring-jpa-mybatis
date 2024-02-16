@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import org.hibernate.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,8 +52,10 @@ public class upLoadController {
 	      String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 	      
 	      System.out.println("uploadForm POST Start");
+	      
+	      //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	      String savedName = uploadFile(originalName, inputStream, uploadPath, suffix);
-	      // Service --> DB CRUD
+	      // Service --> DB CRUD --> DB에 들어간상태니까 여기서 꺼내서 쓰자
 	      
 	      
 	      
@@ -64,20 +65,25 @@ public class upLoadController {
 	      return "uploadResult";
 	   }
 
+	
+		//
 	   private String uploadFile(String originalName, InputStream inputStream, String uploadPath, String suffix) 
 	               throws IOException {
-	      // universally unique identifier (UUID).
+	      // universally unique identifier (UUID). 1개만 있는 값이 필요함
 	      UUID uid = UUID.randomUUID();
 	      // requestPath = requestPath + "/resources/image";
 	      System.out.println("uploadPath->"+uploadPath);
 	      // Directory 생성
 	      File fileDirectory = new File(uploadPath);
+	      
+	      //1번만 실행하면 끝임 => 존재하지 않으면 파일을 생성해주자.
 	      if(!fileDirectory.exists()) {
 	         // 신규 폴더(Directory) 생성
 	         fileDirectory.mkdirs();
 	         System.out.println("업로드용 폴더 생성 : "+uploadPath);
 	      }
 	      
+	      //UUID는 유니크한 식별자(1개만 존재하는거)
 	      String savedName = uid.toString() + "_"+originalName+"."+suffix;
 	      log.info("savedName: "+savedName);
 	      // File target = new File(uploadPath, savedName);
@@ -85,7 +91,7 @@ public class upLoadController {
 	      // 임시파일 생성
 	      File tempFile = new File(uploadPath+savedName);
 	      // tempFile.deleteOnExit();
-	      // Backup File
+	      // Backup File 백엄용 파일임 -> 안해도되지만 안전하게 하려고 하는거임. 폴더를 만들고 넣어줘야함
 	      File tempFile3 = new File("c:/backup/"+savedName);
 	      FileOutputStream outputStream3 = new FileOutputStream(tempFile3);
 	      // 생성된 임시파일에 요청으로 넘어온 file의 inputStream 복사
@@ -105,6 +111,7 @@ public class upLoadController {
 	   }
 	   
 
+	   
 	   @RequestMapping(value="uploadFileDelete", method=RequestMethod.GET)
 	   public String uploadFileDelete(HttpServletRequest request, Model model) {
 		   String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
@@ -112,6 +119,7 @@ public class upLoadController {
 		   log.info("deleteFile: "+ deleteFile);
 		   System.out.println("uploadFileDelete GET start");
 		   int delResult = upFileDelete(deleteFile);
+		   //int로 하는 이유 : 경우의수가 존재하니까. 존재하면 지우고. 안존재하면 내비두고
 		   //dml service 연동
 		   //delResult > 0 --> update member(Img)
 		   
@@ -121,6 +129,7 @@ public class upLoadController {
 		   model.addAttribute("delResult",delResult);
 		   return "uploadResult";
 	   }
+	   
 	   
 	   private int upFileDelete(String deleteFileName) {
 		   int result = 0;

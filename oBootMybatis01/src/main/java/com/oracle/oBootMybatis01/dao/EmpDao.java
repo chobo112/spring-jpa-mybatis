@@ -25,4 +25,6 @@ int condTotalEmp(Emp emp);
 List<EmpDept> listEmpDept();
 
 int deleteEmp(int empno);
+
+String deptName(int deptno);
 }

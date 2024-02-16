@@ -40,6 +40,8 @@ public interface EmpService {
 
 	List<Member1> listMem(Member1 member1);
 
+	String deptName(int deptno);
+
 
 
 }

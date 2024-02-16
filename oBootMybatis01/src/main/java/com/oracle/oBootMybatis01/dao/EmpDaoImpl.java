@@ -181,6 +181,22 @@ public class EmpDaoImpl implements EmpDao {
 		return result;
 	}
 
+	@Override
+	public String deptName(int deptno) {
+		System.out.println("EmpDaoImpl deptName Start");
+		String resultStr = "";
+		
+		try {
+		System.out.println("EmpDaoImpl deptName deptno->"+deptno);
+		resultStr = session.selectOne("AjaxDeptno", deptno);
+		System.out.println("EmpDaoImp deptName resultStr->"+resultStr);
+		} catch (Exception e) {
+			System.out.println("EmpDaoImpl deptName Exception->"+e.getMessage());
+		}
+		
+		return resultStr;
+	}
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
    

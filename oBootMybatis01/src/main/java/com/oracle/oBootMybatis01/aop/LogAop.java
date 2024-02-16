@@ -8,10 +8,10 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 @Aspect //aspect이 나오면 AOP라고 생각하자..
-@Component
+@Component //컨트롤러, 서비스, 레파지가 아니기때문에 컴포넌트 등록해주자
 public class LogAop {
 	
-	
+/*	
 	//oBootMybatis01.dao.EmpDao 패키지 안에 있는 모든 메소드를(모든것들 실행할떄)
 	//즉 EmpDao안에 있는 메소드들이 핵심관심사..
 	//loggerAop방식으로 처리해주세요..
@@ -48,7 +48,7 @@ public class LogAop {
 		System.out.println(" Before.");
 
 	}
-
+*/
 }
 
  
